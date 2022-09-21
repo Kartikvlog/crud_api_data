@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="first.js"></script>
+    <style>
+      .btn{
+        text-align: center;
+      }
+      .formfirst{
+        text-align: center;
+      }
+      .formsecond{
+        text-align: center;
+      }
+      .formthird{
+        text-align: center;
+      }
+      .formcomment{
+        text-align: center;
+      }
+      .editcomment{
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <button onclick="fetchcommentsdata()">Comment Here</button><hr> -->
+    <!-- create form  -->
+    <h1 class="btn">Create Article</h1>
+    <form id="myform" class="formfirst">
+      Title:<input type="text" id="titletext" placeholder="Enter Title"/><br /><br />
+      Text:<input type="text" id="bodytext" placeholder="Enter Text"/><br /><br />
+    <input type="submit" id="saveform" />
+    </form>
+    <hr>
+    <!-- edit form -->
+    <h1 class="btn">Edit Article</h1>
+    <form id="formsecond" class="formsecond">
+      ID:<input type="text" id="articleid" placeholder="Enter Id"><br/><br>
+      Title:<input type="text" id="articletitle" placeholder="Enter Title"/><br /><br />
+      Text:<input type="text" id="articletext" placeholder="Enter Text"/><br /><br />
+    <input type="submit" id="secondform"/>
+    </form>
+    <hr>
+
+    <!-- delete form data  -->
+    <h1 class="btn">Delete Article</h1>
+    <form id="formthird" class="formthird">
+    ID:<input type="text" id="articledelid" placeholder="Enter Id"><br/><br>  
+    <input type="submit" id="deletebtn"/>
+    </form>
+    <hr>
+    
+
+
+    <!-- comments create data  -->
+    <h1 class="btn">Create Comment</h1>
+    <form id="myform" class="formcomment">
+      Comment:<input type="text" id="commentdata" placeholder="Enter your comments"/><br /><br />
+    <input type="submit" id="savecomment" />
+    </form>
+    <hr>
+   
+   <!-- edit comments data -->
+   <h1 class="btn">Edit Comments</h1>
+   <form id="formsecond" class="editcomment">
+     ID:<input type="text" id="commentid" placeholder="Enter Id"><br/><br>
+     Comments:<input type="text" id="commenttext" placeholder="Enter Title"/><br /><br />
+   <input type="submit" id="commenteditdata"/>
+   </form>
+   <hr>
+
+
+    <!-- <button onclick="alldatafun()">All data </button> -->
+    <ul class="message"></ul>
+   <button onclick="myfun()">Show</button>
+   <div class="container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Text</th>
+        </tr>
+      </thead>
+      <tbody id="data">
+      </td>
+      </tbody>
+    </table>
+</div>
+
+<!-- comments data  -->
+<ul class="mymessage"></ul>
+   <button onclick="commentfun()">Comment Show</button>
+   <div class="container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Comment</th>
+        </tr>
+      </thead>
+      <tbody id="mydata">
+      </td>
+      </tbody>
+    </table>
+</div>
+
+    <script>
+      //create form data
+      document.getElementById("saveform").addEventListener("click", function (event) {
+          event.preventDefault();
+          var obj = {
+            title: document.getElementById("titletext").value,
+            text: document.getElementById("bodytext").value,
+          };
+          fetch("http://localhost:3000/articles", {
+            method: "POST",
+            body: JSON.stringify(obj),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          })
+            .then((response) => response.json())
+            .then((json) => console.log(json));
+        }); 
+
+
+        //comment create data 
+        document.getElementById("savecomment").addEventListener("click", function (event) {
+          event.preventDefault();
+          var commentobj = {
+            commenter: document.getElementById("commentdata").value,
+          };
+          fetch("http://localhost:3000/articles/22/comments", {
+            method: "POST",
+            body: JSON.stringify(commentobj),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          })
+            .then((response) => response.json())
+            .then((json) => console.log(json));
+        }); 
+
+        //edit form data
+        document.getElementById("secondform").addEventListener("click", function (e) {
+          e.preventDefault();
+          var objs = {
+            id: document.getElementById("articleid").value,
+            title: document.getElementById("articletitle").value,
+            text: document.getElementById("articletext").value,
+          };
+          fetch("http://localhost:3000/articles/6", {
+            method: "put",
+            body: JSON.stringify(objs),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          })
+            .then((response) => response.json())
+            .then((json) => console.log(json))
+        }); 
+
+
+        //edit comments data
+        document.getElementById("commenteditdata").addEventListener("click", function (e) {
+          e.preventDefault();
+          var objedit = {
+            id: document.getElementById("commentid").value,
+            commenter: document.getElementById("commenttext").value,
+          };
+          fetch("http://localhost:3000/articles/35/comments", {
+            method: "put",
+            body: JSON.stringify(objedit),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          })
+            .then((response) => response.json())
+            .then((json) => console.log(json))
+        }); 
+
+        
+      //delete data
+      document.getElementById("deletebtn").addEventListener("click", function (evn) {
+          evn.preventDefault();
+          var objdel = {
+            id: document.getElementById("articledelid").value,
+          };
+          fetch("http://localhost:3000/articles/33", {
+            method: "DELETE",
+            body: JSON.stringify(objdel),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          })
+            .then((response) => response.json())
+            .then((json) => console.log(json))
+        }); 
+
+      //show button data
+        function myfun(){
+        $.ajax({
+          url: 'http://localhost:3000/articles',
+          type:"GET",
+          dataType:"JSON",
+          data:JSON.stringify({}),
+          success:function(data){
+          var temp = "";
+          data.forEach((itemData) => {
+            temp += "<tr>";
+            temp += "<td>" + itemData.id + "</td>";
+            temp += "<td>" + itemData.title + "</td>";
+            temp += "<td>" + itemData.text + "</td></tr>";
+            
+          });
+          document.getElementById('data').innerHTML = temp;
+        }
+      }
+    )
+  }
+   
+  //comment show data
+  function commentfun(){
+        $.ajax({
+          url: 'http://localhost:3000/articles/22/comments',
+          type:"GET",
+          dataType:"JSON",
+          data:JSON.stringify({}),
+          success:function(mydata){
+          var temps = "";
+          mydata.forEach((itemDatas) => {
+            temps += "<tr>";
+            temps += "<td>" + itemDatas.id + "</td>";
+            temps += "<td>" + itemDatas.commenter + "</td>";
+          });
+          document.getElementById('mydata').innerHTML = temps;
+        }
+      }
+    )
+  }
+
+  function alldatafun(){
+        $.ajax({
+          url: "http://localhost:3000/articles",
+          type:"GET",
+          dataType:"JSON",
+          data:JSON.stringify({}),
+          success:function(data){
+            $('.message').append("<li>"+JSON.stringify(data)+"</li>")
+          }
+        });
+    }
+
+    //show all comment data 
+    function fetchcommentsdata(){
+        $.ajax({
+          url: "http://localhost:3000/articles/4/comments",
+          type:"GET",
+          dataType:"JSON",
+          data:JSON.stringify({}),
+          success:function(data){
+            $('.commentmessage').append("<li>"+JSON.stringify(data)+"</li>")
+          }
+        });
+    }
+</script>
+  </script>
+  </body>
+</html>
+
+
+
+
+

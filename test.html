@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test</title>
+</head>
+<body>
+  <button onclick="fetch()">Show</button>
+  <div class="container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Text</th>
+        </tr>
+      </thead>
+      <tbody id="data">
+      </td>
+      </tbody>
+    </table>
+</div><br>
+</body>
+</html>
+<script>
+    function fetch(){
+        $.ajax({
+          url: 'http://localhost:3000/articles',
+          type:"GET",
+          dataType:"JSON",
+          data:JSON.stringify({}),
+          success:function(data){
+          var temp = "";
+          data.forEach((itemData) => {
+            temp += "<tr>";
+            temp += "<td>" + itemData.id + "</td>";
+            temp += "<td>" + itemData.title + "</td>";
+            temp += "<td>" + itemData.text + "</td></tr>";
+          });
+          document.getElementById('data').innerHTML = temp;
+        }
+      }
+    )
+  } 
+</script>
+</script>
+
